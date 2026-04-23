@@ -127,8 +127,8 @@ impl Grade {
     /// assert_eq!(Grade::from_string("a"), Some(Grade::A));
     /// assert_eq!(Grade::from_string("Z"), None);
     /// ```
-    pub fn from_string(_s: &str) -> Option<Grade> {
-        match _s.to_uppercase().as_str() {
+    pub fn from_string(s: &str) -> Option<Grade> {
+        match s.to_uppercase().as_str() {
             "A" => Some(Grade::A),
             "B" => Some(Grade::B),
             "C" => Some(Grade::C),
@@ -150,16 +150,16 @@ impl Grade {
 impl CourseGrade {
     /// Creates a new CourseGrade.
     pub fn new(
-        _course_code: String,
-        _course_name: String,
-        _credits: u16,
-        _grade: Grade,
+        course_code: String,
+        course_name: String,
+        credits: u16,
+        grade: Grade,
     ) -> CourseGrade {
         CourseGrade {
-            course_code: _course_code,
-            course_name: _course_name,
-            credits: _credits,
-            grade: _grade,
+            course_code: course_code,
+            course_name: course_name,
+            credits: credits,
+            grade: grade,
         }
     }
 
@@ -179,23 +179,23 @@ impl StudentDatabase {
 
     /// Adds a student to the database.
     /// Returns `Err` if a student with the same id already exists.
-    pub fn add_student(&mut self, _student: Student) -> Result<(), String> {
-        if self.students.contains_key(&_student.id) {
-            Err(format!("Student with id {} already exists", _student.id))
+    pub fn add_student(&mut self, student: Student) -> Result<(), String> {
+        if self.students.contains_key(&student.id) {
+            Err(format!("Student with id {} already exists", student.id))
         } else {
-            self.students.insert(_student.id.clone(), _student);
+            self.students.insert(student.id.clone(), student);
             Ok(())
         }
     }
 
     /// Returns a reference to the student with the given id, or `None`.
-    pub fn find_student(&self, _id: &str) -> Option<&Student> {
-        self.students.get(_id)
+    pub fn find_student(&self, id: &str) -> Option<&Student> {
+        self.students.get(id)
     }
 
     /// Returns a mutable reference to the student with the given id, or `None`.
-    pub fn find_student_mut(&mut self, _id: &str) -> Option<&mut Student> {
-        self.students.get_mut(_id)
+    pub fn find_student_mut(&mut self, id: &str) -> Option<&mut Student> {
+        self.students.get_mut(id)
     }
 
     /// Returns the total number of students in the database.
