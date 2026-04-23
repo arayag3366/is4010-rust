@@ -150,16 +150,16 @@ impl Grade {
 impl CourseGrade {
     /// Creates a new CourseGrade.
     pub fn new(
-        course_code: String,
-        course_name: String,
-        credits: u16,
-        grade: Grade,
+        _course_code: String,
+        _course_name: String,
+        _credits: u16,
+        _grade: Grade,
     ) -> CourseGrade {
         CourseGrade {
-            course_code: course_code,
-            course_name: course_name,
-            credits: credits,
-            grade: grade,
+            course_code: _course_code,
+            course_name: _course_name,
+            credits: _credits,
+            grade: _grade,
         }
     }
 
