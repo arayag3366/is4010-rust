@@ -44,7 +44,36 @@ impl fmt::Display for PasswordStrength {
 ///   5–6 → Strong
 ///   7   → VeryStrong
 pub fn validate_strength(_password: &str) -> PasswordStrength {
-    todo!("Implement validate_strength")
+    let mut score = 0;
+    if _password.len() >= 8 {
+        score += 1;
+    }
+    if _password.len() >= 12 {
+        score += 1;
+    }
+    if _password.len() >= 16 {
+        score += 1;
+    }
+    if _password.chars().any(|c| c.is_ascii_lowercase()) {
+        score += 1;
+    }
+    if _password.chars().any(|c| c.is_ascii_uppercase()) {
+        score += 1;
+    }
+    if _password.chars().any(|c| c.is_ascii_digit()) {
+        score += 1;
+    }
+    if _password.chars().any(|c| !c.is_ascii_alphanumeric()) {
+        score += 1;
+    }
+
+    match score {
+        0..=2 => PasswordStrength::Weak,
+        3..=4 => PasswordStrength::Medium,
+        5..=6 => PasswordStrength::Strong,
+        7 => PasswordStrength::VeryStrong,
+        _ => unreachable!(),
+    }
 }
 
 /// Returns `true` if `password` matches a common weak pattern.
@@ -53,7 +82,17 @@ pub fn validate_strength(_password: &str) -> PasswordStrength {
 ///   - All characters are the same (e.g. "aaaa", "1111")
 ///   - The password is one of the 10 common passwords listed in COMMON_PASSWORDS
 pub fn check_common_patterns(_password: &str) -> bool {
-    todo!("Implement check_common_patterns")
+    let lower = _password.to_ascii_lowercase();
+    if COMMON_PASSWORDS.iter().any(|&p| p == lower) {
+        return true;
+    }
+    if _password
+        .chars()
+        .all(|c| c == _password.chars().next().unwrap())
+    {
+        return true;
+    }
+    false
 }
 
 /// Estimates the Shannon entropy of `password` in bits.
@@ -68,7 +107,23 @@ pub fn check_common_patterns(_password: &str) -> bool {
 ///
 /// Use `f64::log2(charset_size as f64) * length as f64`.
 pub fn calculate_entropy(_password: &str) -> f64 {
-    todo!("Implement calculate_entropy")
+    let mut charset_size = 0;
+    if _password.chars().any(|c| c.is_ascii_lowercase()) {
+        charset_size += 26;
+    }
+    if _password.chars().any(|c| c.is_ascii_uppercase()) {
+        charset_size += 26;
+    }
+    if _password.chars().any(|c| c.is_ascii_digit()) {
+        charset_size += 10;
+    }
+    if _password.chars().any(|c| !c.is_ascii_alphanumeric()) {
+        charset_size += 32; // 94 total - 62 alphanumeric
+    }
+    if charset_size == 0 {
+        return 0.0;
+    }
+    f64::log2(charset_size as f64) * _password.len() as f64
 }
 
 /// Ten common passwords to flag as weak patterns.

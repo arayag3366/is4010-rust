@@ -22,7 +22,17 @@ use rand::Rng;
 /// assert_eq!(pwd.len(), 12);
 /// ```
 pub fn generate_random(_length: usize, _use_symbols: bool) -> String {
-    todo!("Implement generate_random — hint: build a charset string then pick random chars from it using rand::thread_rng()")
+    let mut rng = rand::thread_rng();
+    let mut chars: Vec<char> = ('a'..='z').chain('A'..='Z').chain('0'..='9').collect();
+    if _use_symbols {
+        chars.extend("!@#$%^&*".chars());
+    }
+    (0.._length)
+        .map(|_| {
+            let idx = rng.gen_range(0..chars.len());
+            chars[idx]
+        })
+        .collect()
 }
 
 /// Generates a passphrase made of `word_count` random common English words joined by `separator`.
@@ -37,7 +47,14 @@ pub fn generate_random(_length: usize, _use_symbols: bool) -> String {
 /// assert_eq!(phrase.split('-').count(), 3);
 /// ```
 pub fn generate_passphrase(_word_count: usize, _separator: char) -> String {
-    todo!("Implement generate_passphrase — hint: pick random indices into WORD_LIST, join with separator.to_string()")
+    let mut rng = rand::thread_rng();
+    (0.._word_count)
+        .map(|_| {
+            let idx = rng.gen_range(0..WORD_LIST.len());
+            WORD_LIST[idx]
+        })
+        .collect::<Vec<&str>>()
+        .join(&_separator.to_string())
 }
 
 /// Generates a numeric PIN of the given `length` (digits 0–9 only).
@@ -51,7 +68,13 @@ pub fn generate_passphrase(_word_count: usize, _separator: char) -> String {
 /// assert!(pin.chars().all(|c| c.is_ascii_digit()));
 /// ```
 pub fn generate_pin(_length: usize) -> String {
-    todo!("Implement generate_pin — hint: sample from '0'..='9'")
+    let mut rng = rand::thread_rng();
+    (0.._length)
+        .map(|_| {
+            let digit = rng.gen_range(0..10);
+            std::char::from_digit(digit, 10).unwrap()
+        })
+        .collect()
 }
 
 // A small word list for passphrases.
